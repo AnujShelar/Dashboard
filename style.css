@@ -1,5 +1,16 @@
 .main-body {
+    display: inline-flex;
+    position:fixed;
     background-color: orange;
-    height: 50vh;
-    width: 50%;
+    width: 100vh;
+    padding: 20px;
+}
+
+.sidenav {
+    display: inline-block;
+    background-color:#f8f8f8;
+    height: 100vh;
+    Width: 10vw;
+    overflow:hidden;
+    margin-bottom: 0px;
 }
