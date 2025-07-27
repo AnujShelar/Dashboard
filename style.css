@@ -1,16 +1,33 @@
+.body-layer {
+    display: flex;
+}
+
 .main-body {
-    display: inline-flex;
-    position:fixed;
-    background-color: orange;
-    width: 100vh;
+    flex: 1;
+    background-image: linear-gradient(#c7b1ff, #b9b0ff, #acafff);
     padding: 20px;
+    height: 100vh;
+}
+
+#main-text {
+    font-size: 30px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .sidenav {
-    display: inline-block;
-    background-color:#f8f8f8;
-    height: 100vh;
-    Width: 10vw;
-    overflow:hidden;
-    margin-bottom: 0px;
+    background-color: #f9f9f9;
+    width: 10vw;
+}
+
+.scorecard {
+    display: flex;
+    margin: 1px;
+    justify-content: space-evenly;
+    gap: 20px;
+}
+.totalcustomers {
+    border: 1px solid black;
+    border-radius: 1px;
+    width: 130px;
+    padding: 1px;
 }
