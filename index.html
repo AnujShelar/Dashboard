@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
-        <title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <title>
             Sales Dashboard
         </title>
     </head>
@@ -51,18 +52,112 @@
             <!--- Created Scorecard Metrics --->
             <div class="scorecard">
                 <div class="totalcustomers">
-                    <h2 id="total-Customers">Total Customers</h2>
+                    <h2 id="total-Customers">Total customers</h2>
+                    <p><strong>567,899</strong></p>
                 </div>
                 <div class="totalcustomers">
-                    <h2 id="total-Customers">Total Customers</h2>
+                    <h2 id="total-revenue">Total revenue</h2>
+                    <p><strong>3,465M</strong></p>
                 </div>
                 <div class="totalcustomers">
-                    <h2 id="total-Customers">Total Customers</h2>
+                    <h2 id="total-orders">Total orders</h2>
+                    <p><strong>1,136M</strong></p>
                 </div>
                 <div class="totalcustomers">
-                    <h2 id="total-Customers">Total Customers</h2>
+                    <h2 id="total-returns">Total returns</h2>
+                    <p><strong>1,789</strong></p>
                 </div>
             </div>
+            <canvas id="salesChart" width="400" height="150"></canvas>
+ <script>
+            const baseData = {
+                labels: ['1 Jul', '2 Jul', '3 Jul', '4 Jul', '5 Jul', '6 Jul', '7 Jul', '8 Jul', '9 Jul', '10 Jul', '11 Jul', '12 Jul'],
+                datasets: [
+                    {label: 'Gross Margin', data: [30, 20, 35], bgColor: 'purple', hidden: false},
+                    {label: 'Revenue', data: [35, 40, 50], bgColor: 'orange', hidden: false }
+                ]
+            };
+                const iLastDs = baseData.datasets.length -1;
+
+                const data = {
+                    labels: baseData.datasets
+                    .map(() => baseData.labels)
+                    .map((labels, i) => i < iLastDs ? [...labels, null] : labels)
+                    .flatMap(v => v),
+                    datasets: [{
+                        data: baseData.datasets
+                        .map(ds => ds.data)
+                        .map((data, i) => i < iLastDs ? [...data, null] : data)
+                        .flatMap(v => v),
+                        backgroundColor: baseData.datasets
+                        .map(ds => ds.data.map(v => ds.bgColor))
+                        .map((bgColors, i) => i < iLastDs ? [...bgColors, null] : bgColors)
+                        .flatMap(v => v),
+                        categoryPercantage: 1,
+                        barPercantage: 0.9
+                    }]
+                };
+
+                const options = {
+                    maintainAspectRatio: true,
+                    responsive: true,
+                    interaction: {
+                        intersect: true,
+                        mode: 'index',
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                generateLabels: chart => baseData.datasets.map((ds, i) => ({
+                                    datasetIndex: i,
+                                    text: ds.label,
+                                    fillStyle: ds.bgColor,
+                                    strokeStyle: 'lightgray',
+                                    hidden: baseData.datasets[i].hidden
+                                }))
+                            },
+                            onClick: (event, legendItem, legend) => {
+                                baseData.datasets[legendItem.datasetIndex].hidden = !baseData.datasets[legendItem.datasetIndex].hidden;
+                                const iFirstValue = legendItem.datasetIndex + legendItem.datasetIndex * baseData.labels.length;
+                                for (let i = iFirstValue; i < iFirstValue + baseData.labels.length; i++) {
+                                    legend.chart.toggleDataVisibility(i);
+                                }
+                                legend.chart.update();
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: ctx => {
+                                    const dsIndex = Math.floor(ctx[0].dataIndex / baseData.datasets.length);
+                                    return baseData.datasets[dsIndex].label + ' / ' + ctx[0].label; 
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Product Sales',
+                            }
+                        }
+                    }
+                };
+
+                new Chart('salesChart', {
+                    type: 'bar',
+                    data,
+                    options
+                });
+   
+    
+ </script>
                 </div>
                 </div>
          </main>   
